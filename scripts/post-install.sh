@@ -72,3 +72,26 @@ elif [[ -f /etc/os-release ]]; then
         install_chkconfig
     fi
 fi
+
+# Upgrade notice
+cat << EOF
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! Important 1.x to 2.x Upgrade Notice !
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+Thank you for installing InfluxDB v2.  Due to significant changes between
+the v1 and v2 versions, additional steps are required to complete the upgrade.
+
+Please review the complete upgrade procedure at the following URL:
+
+https://docs.influxdata.com/influxdb/v2.0/upgrade/v1-to-v2/
+
+Minimally, the following steps will be necessary:
+
+* Make a backup of all v1 data
+* Run the 'influx upgrade' command
+* Follow the prompts to complete the upgrade process
+
+If upgrading to v2 was not intended, please simply re-install the v1 InfluxDB
+package.
+EOF
