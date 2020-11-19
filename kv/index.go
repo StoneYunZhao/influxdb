@@ -195,16 +195,18 @@ func (i *Index) Walk(ctx context.Context, tx Tx, foreignKey []byte, visitFn Visi
 		return err
 	}
 
-	return indexWalk(ctx, cursor, sourceBucket, visitFn)
+	return indexWalk(ctx, foreignKey, cursor, sourceBucket, visitFn)
 }
 
 // indexWalk consumes the indexKey and primaryKey pairs in the index bucket and looks up their
 // associated primaryKey's value in the provided source bucket.
 // When an item is located in the source, the provided visit function is called with primary key and associated value.
-func indexWalk(ctx context.Context, indexCursor ForwardCursor, sourceBucket Bucket, visit VisitFunc) (err error) {
+func indexWalk(ctx context.Context, foreignKey []byte, indexCursor ForwardCursor, sourceBucket Bucket, visit VisitFunc) (err error) {
 	var keys [][]byte
 	for ik, pk := indexCursor.Next(); ik != nil; ik, pk = indexCursor.Next() {
-		keys = append(keys, pk)
+		if string(foreignKey) == string(ik) {
+			keys = append(keys, pk)
+		}
 	}
 
 	if err := indexCursor.Err(); err != nil {
