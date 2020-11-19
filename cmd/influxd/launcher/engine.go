@@ -20,7 +20,7 @@ import (
 var _ Engine = (*storage.Engine)(nil)
 
 // Engine defines the time-series storage engine.  Wraps *storage.Engine
-// to facilitate testing.
+// to facilitate Testing.
 type Engine interface {
 	influxdb.DeleteService
 	storage.PointsWriter
@@ -59,7 +59,7 @@ type TemporaryEngine struct {
 }
 
 // NewTemporaryEngine creates a new engine that places the storage engine files into
-// a temporary directory; used for testing.
+// a temporary directory; used for Testing.
 func NewTemporaryEngine(c storage.Config, options ...storage.Option) *TemporaryEngine {
 	return &TemporaryEngine{
 		config:  c,
