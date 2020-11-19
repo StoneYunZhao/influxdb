@@ -4,8 +4,6 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"github.com/spf13/viper"
-	"go.uber.org/zap"
 	"io"
 	"io/ioutil"
 	nethttp "net/http"
@@ -32,6 +30,8 @@ import (
 	"github.com/influxdata/influxdb/v2/tenant"
 	dto "github.com/prometheus/client_model/go"
 	"github.com/prometheus/common/expfmt"
+	"github.com/spf13/viper"
+	"go.uber.org/zap"
 )
 
 // TestLauncher is a test wrapper for launcher.Launcher.
@@ -54,7 +54,7 @@ type TestLauncher struct {
 	Stdout bytes.Buffer
 	Stderr bytes.Buffer
 
-	// Flag to act as standard server: disk store, no-e2e Testing flag
+	// Flag to act as standard server: disk store, no-e2e testing flag
 	realServer bool
 }
 
