@@ -5,7 +5,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"go.uber.org/zap"
 	"html/template"
 	"io"
 	"io/ioutil"
@@ -32,6 +31,7 @@ import (
 	"github.com/influxdata/influxdb/v2/kit/prom"
 	"github.com/influxdata/influxdb/v2/mock"
 	"github.com/influxdata/influxdb/v2/query"
+	"go.uber.org/zap"
 )
 
 func TestLauncher_Write_Query_FieldKey(t *testing.T) {

@@ -5,7 +5,6 @@ import (
 	"crypto/tls"
 	"errors"
 	"fmt"
-	"github.com/influxdata/influxdb/v2/telemetry"
 	"io"
 	"net"
 	nethttp "net/http"
@@ -64,6 +63,7 @@ import (
 	"github.com/influxdata/influxdb/v2/task/backend/middleware"
 	"github.com/influxdata/influxdb/v2/task/backend/scheduler"
 	telegrafservice "github.com/influxdata/influxdb/v2/telegraf/service"
+	"github.com/influxdata/influxdb/v2/telemetry"
 	"github.com/influxdata/influxdb/v2/tenant"
 	_ "github.com/influxdata/influxdb/v2/tsdb/engine/tsm1" // needed for tsm1
 	_ "github.com/influxdata/influxdb/v2/tsdb/index/tsi1"  // needed for tsi1
@@ -83,7 +83,7 @@ import (
 const (
 	// BoltStore stores all REST resources in boltdb.
 	BoltStore = "bolt"
-	// MemoryStore stores all REST resources in memory (useful for Testing).
+	// MemoryStore stores all REST resources in memory (useful for testing).
 	MemoryStore = "memory"
 
 	// LogTracing enables tracing via zap logs
@@ -161,7 +161,7 @@ func (m *Launcher) NatsURL() string {
 }
 
 // Engine returns a reference to the storage engine. It should only be called
-// for end-to-end Testing purposes.
+// for end-to-end testing purposes.
 func (m *Launcher) Engine() Engine {
 	return m.engine
 }
@@ -203,7 +203,7 @@ func (m *Launcher) Shutdown(ctx context.Context) {
 	m.log.Sync()
 }
 
-// Cancel executes the context cancel on the program. Used for Testing.
+// Cancel executes the context cancel on the program. Used for testing.
 func (m *Launcher) Cancel() { m.cancel() }
 
 func (m *Launcher) run(ctx context.Context, opts *RunOpts) (err error) {
@@ -382,7 +382,7 @@ func (m *Launcher) run(ctx context.Context, opts *RunOpts) (err error) {
 	}
 
 	if opts.Testing {
-		// the Testing engine will write/read into a temporary directory
+		// the testing engine will write/read into a temporary directory
 		engine := NewTemporaryEngine(
 			opts.StorageConfig,
 			storage.WithMetaClient(metaClient),
@@ -923,7 +923,7 @@ func (m *Launcher) run(ctx context.Context, opts *RunOpts) (err error) {
 		if logLevel == zap.DebugLevel {
 			m.httpServer.Handler = http.LoggingMW(httpLogger)(m.httpServer.Handler)
 		}
-		// If we are in Testing mode we allow all data to be flushed and removed.
+		// If we are in testing mode we allow all data to be flushed and removed.
 		if opts.Testing {
 			m.httpServer.Handler = http.DebugFlush(ctx, m.httpServer.Handler, flushers)
 		}
