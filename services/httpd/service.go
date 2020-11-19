@@ -2,6 +2,7 @@
 package httpd // import "github.com/influxdata/influxdb/services/httpd"
 
 import (
+	"context"
 	"crypto/tls"
 	"fmt"
 	"net"
@@ -56,6 +57,8 @@ type Service struct {
 	limit     int
 	tlsConfig *tls.Config
 	err       chan error
+
+	httpServer http.Server
 
 	unixSocket         bool
 	unixSocketPerm     uint32
@@ -192,6 +195,10 @@ func (s *Service) Open() error {
 func (s *Service) Close() error {
 	s.Handler.Close()
 
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	s.httpServer.Shutdown(ctx)
+
 	if s.ln != nil {
 		if err := s.ln.Close(); err != nil {
 			return err
@@ -247,8 +254,12 @@ func (s *Service) serveUnixSocket() {
 func (s *Service) serve(listener net.Listener) {
 	// The listener was closed so exit
 	// See https://github.com/golang/go/issues/4373
-	err := http.Serve(listener, s.Handler)
-	if err != nil && !strings.Contains(err.Error(), "closed") {
+
+	s.httpServer = http.Server{
+		Handler: s.Handler,
+	}
+
+	if err := s.httpServer.Serve(listener); err != nil && !strings.Contains(err.Error(), "closed") {
 		s.err <- fmt.Errorf("listener failed: addr=%s, err=%s", s.Addr(), err)
 	}
 }
