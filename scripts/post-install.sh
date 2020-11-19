@@ -75,23 +75,29 @@ fi
 
 # Upgrade notice
 cat << EOF
+
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! Important 1.x to 2.x Upgrade Notice !
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 Thank you for installing InfluxDB v2.  Due to significant changes between
-the v1 and v2 versions, additional steps are required to complete the upgrade.
+the v1 and v2 versions, if you are upgrading from v1 then additional steps are
+required to complete the upgrade.  If upgrading to v2 was not intended, please
+simply re-install the v1 InfluxDB package now.
 
-Please review the complete upgrade procedure at the following URL:
+Please review the complete upgrade procedure:
 
 https://docs.influxdata.com/influxdb/v2.0/upgrade/v1-to-v2/
 
 Minimally, the following steps will be necessary:
 
-* Make a backup of all v1 data
-* Run the 'influx upgrade' command
+* Make a copy of all underlying v1 data (typically under /var/lib/influxdb)
+* Run the 'influxd upgrade' command
 * Follow the prompts to complete the upgrade process
 
-If upgrading to v2 was not intended, please simply re-install the v1 InfluxDB
-package.
+For new or upgrade installations, please also review the getting
+started guide:
+
+https://docs.influxdata.com/influxdb/v2.0/get-started/
+
 EOF
